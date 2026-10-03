@@ -10,6 +10,8 @@ import logging
 import sys
 from pathlib import Path
 
+from data_loaders import load_data
+
 logger = logging.getLogger(__name__)
 
 
@@ -43,9 +45,9 @@ def parse_arguments():
 def validate_input(filepath):
     """Check whether the input path exists and is a file."""
     if Path(filepath).is_file():
-        logger.info(f"Input file validated: {filepath}")
+        logger.info("Input file validated: %s", filepath)
         return True
-    logger.error(f"Input file not found: {filepath}")
+    logger.error("Input file not found: %s", filepath)
     return False
 
 
@@ -54,9 +56,16 @@ def main():
     args = parse_arguments()
     setup_logging(args.verbose)
     logger.debug(
-        f"Arguments parsed: input={args.input}, output={args.output}, format={args.format}"
+        "Arguments parsed: input=%s, output=%s, format=%s",
+        args.input, args.output, args.format,
     )
+
     if not validate_input(args.input):
+        sys.exit(1)
+
+    try:
+        data = load_data(args.input)
+    except ValueError:
         sys.exit(1)
 
 
