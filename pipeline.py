@@ -86,7 +86,7 @@ def main():
 
     # Print report last
     print("Cleaning report:")
-    pprint(report)
+    pprint(report, sort_dicts=False)
 
 
 if __name__ == "__main__":
